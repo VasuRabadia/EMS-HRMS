@@ -1,4 +1,5 @@
-from flask_pymongo import pymongo, ObjectId
+from flask_pymongo import pymongo
+from bson import ObjectId
 from app import mongo
 from werkzeug.security import generate_password_hash, check_password_hash
 

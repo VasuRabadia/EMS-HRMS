@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+
+    <!-- Include DataTables CSS -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> -->
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- DatePicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- Bootstrap Datatable -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Include jQuery and DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <!-- Select2 Script -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Bootstrap Datatable Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+    <!-- DatePicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    
+    <!-- LordIcon -->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+<body>
+    <button type="button" class="logout-btn btn btn-primary d-inline-flex justify-content-evenly align-items-center p-2 m-2" onclick="logout()">
+        <span class="mx-1">
+            <lord-icon src="https://cdn.lordicon.com/uwibpbyg.json" trigger="hover" stroke="bold" colors="primary:#121331,secondary:#f24c00,tertiary:#b4b4b4" class="logout-btn-lord-icon">
+            </lord-icon>
+        </span class="mx-1">
+        <span>
+            Log Out
+        </span>
+    </button>
+    <table id="example" class="display table table-hover border border-dark" style="width:100%">
+        <thead>
+            <tr>
+                <th class="bg-dark bg-gradient text-white">Actions</th>
+                <th class="bg-dark bg-gradient text-white">Name</th>
+                <th class="bg-dark bg-gradient text-white">Reference Name</th>
+                <th class="bg-dark bg-gradient text-white">Total Investment</th>
+                <th class="bg-dark bg-gradient text-white">Plan</th>
+                <th class="bg-dark bg-gradient text-white">Last Generated Date (DD-MM-YYYY)</th>
+                <th class="bg-dark bg-gradient text-white">Mobile Number</th>
+                <th class="bg-dark bg-gradient text-white">City</th>
+                <th class="bg-dark bg-gradient text-white">Investment Date (DD-MM-YYYY)</th>
+                <th class="bg-dark bg-gradient text-white">Email</th>
+                <th class="bg-dark bg-gradient text-white">Age</th>
+            </tr>
+        </thead>
+        <thead class="filters">
+            <tr>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    &nbsp;
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="Name">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="Reference Name">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="Total Investment">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <select aria-label="Default select example" id="plan_list" class="form-select select2" data-bs-toggle="select2">
+                        <option value="">-</option>
+                        {{plans}}
+                        {% for plan in plans %}
+                            <option value="{{plan}}">{{plan}}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark datepicker" placeholder="Last Generated Date (DD-MM-YYYY)">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="Mobile Number">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="City">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark datepicker" placeholder="Investment Date (DD-MM-YYYY)">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="Email">
+                </th>
+                <th scope="col" class="align-middle bg-light bg-gradient text-dark">
+                    <input type="text" class="form-control bg-light border border-dark" placeholder="Age">
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr>
+                <th class="bg-dark bg-gradient text-white">Actions</th>
+                <th class="bg-dark bg-gradient text-white">Name</th>
+                <th class="bg-dark bg-gradient text-white">Reference Name</th>
+                <th class="bg-dark bg-gradient text-white">Total Investment</th>
+                <th class="bg-dark bg-gradient text-white">Plan</th>
+                <th class="bg-dark bg-gradient text-white">Last Generated Date (DD-MM-YYYY)</th>
+                <th class="bg-dark bg-gradient text-white">Mobile Number</th>
+                <th class="bg-dark bg-gradient text-white">City</th>
+                <th class="bg-dark bg-gradient text-white">Investment Date (DD-MM-YYYY)</th>
+                <th class="bg-dark bg-gradient text-white">Email</th>
+                <th class="bg-dark bg-gradient text-white">Age</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Modal -->
+
+    <!-- Button trigger modal -->
+    <button type="button" class="create-btn btn btn-primary d-inline-flex justify-content-evenly align-items-center p-2 m-2" data-bs-toggle="modal" data-bs-target="#create_modal">
+        <span class="mx-1">
+            <lord-icon src="https://cdn.lordicon.com/ujxzdfjx.json" trigger="hover" stroke="bold" state="hover-unfold" colors="primary:#121331,secondary:#b4b4b4" class="create-btn-lord-icon">
+            </lord-icon>
+        </span class="mx-1">
+        <span>
+            Create A New Entry
+        </span>
+    </button>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="create_modal" tabindex="-1" aria-labelledby="create_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="create_modalLabel">New Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create_form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="reference_name">Reference Name</label>
+                            <input type="text" name="reference_name" class="form-control" id="reference_name"  placeholder="Reference Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="total_investment">Total Investment</label>
+                            <input type="text" name="total_investment" class="form-control" id="total_investment"  placeholder="Total Investment">
+                        </div>
+                        <div class="form-group">
+                            <label for="plan">Plan</label>
+                            <select class="form-select" aria-label="Default select example" name="plan" id="plan_select" style="width: 100%;">
+                                <option value="" selected>-</option>
+                                <option value="Basic">Basic</option>
+                                <option value="Silver">Silver</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Platinum">Platinum</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_generated_date">Last Generated Date (DD-MM-YYYY)</label>
+                            <input type="text" name="last_generated_date" class="form-control datepicker" id="last_generated_date"  placeholder="Last Generated Date (DD-MM-YYYY)">
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile_number">Mobile Number</label>
+                            <input type="text" name="mobile_number" class="form-control" id="mobile_number"  placeholder="Mobile Number">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" name="city" class="form-control" id="city"  placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label for="investment_date">Investment Date (DD-MM-YYYY)</label>
+                            <input type="text" name="investment_date" class="form-control datepicker" id="investment_date"  placeholder="Investment Date (DD-MM-YYYY)">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="text" name="age" class="form-control" id="age"  placeholder="Age">
+                        </div>
+                        <div class="form-check">
+                        </div>
+                        <button type="button" class="create-submit-btn btn btn-primary d-inline-flex justify-content-evenly align-items-center">
+                            <span class="mx-1">
+                                <lord-icon src="https://cdn.lordicon.com/dangivhk.json" trigger="hover" stroke="bold" state="hover-pinch" colors="primary:#121331,secondary:#66ee78" class="create-submit-btn-lord-icon pt-1">
+                                </lord-icon>
+                            </span>
+                            <span class="mx-1">
+                                Submit
+                            </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="create-close-btn btn btn-secondary d-inline-flex justify-content-evenly align-items-center" data-bs-dismiss="modal">
+                        <span class="mx-1">
+                            <lord-icon src="https://cdn.lordicon.com/gkagksfn.json" trigger="hover" stroke="bold" colors="primary:#ee6d66,secondary:#121331" class="create-close-btn-lord-icon pt-1">
+                            </lord-icon>
+                        </span>
+                        <span class="mx-1">
+                            Back
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="update_modal" tabindex="-1" aria-labelledby="update_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="update_modalLabel">Update Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update_form" method="post" enctype="multipart/form-data">
+                        <div class="form-group d-none">
+                            <label for="update_id">ID</label>
+                            <input type="text" name="id" class="form-control" id="update_id" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_name">Name</label>
+                            <input type="text" name="name" class="form-control" id="update_name" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_reference_name">Reference Name</label>
+                            <input type="text" name="reference_name" class="form-control" id="update_reference_name"
+                                placeholder="Reference Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_total_investment">Total Investment</label>
+                            <input type="text" name="total_investment" class="form-control" id="update_total_investment"
+                                placeholder="Total Investment">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_plan">Plan</label>
+                            <select class="form-select" aria-label="Default select example" name="plan" id="update_plan"
+                                style="width: 100%;">
+                                <option value="" selected>-</option>
+                                <option value="Basic">Basic</option>
+                                <option value="Silver">Silver</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Platinum">Platinum</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="update_last_generated_date">Last Generated Date (DD-MM-YYYY)</label>
+                            <input type="text" name="last_generated_date" class="form-control datepicker"
+                                id="update_last_generated_date" placeholder="Last Generated Date (DD-MM-YYYY)">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_mobile_number">Mobile Number</label>
+                            <input type="text" name="mobile_number" class="form-control" id="update_mobile_number"
+                                placeholder="Mobile Number">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_city">City</label>
+                            <input type="text" name="city" class="form-control" id="update_city" placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_investment_date">Investment Date (DD-MM-YYYY)</label>
+                            <input type="text" name="investment_date" class="form-control datepicker"
+                                id="update_investment_date" placeholder="Investment Date (DD-MM-YYYY)">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_email">Email address</label>
+                            <input type="email" name="email" class="form-control" id="update_email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_age">Age</label>
+                            <input type="text" name="age" class="form-control" id="update_age" placeholder="Age">
+                        </div>
+                        <div class="form-check">
+                        </div>
+                        <button type="button"
+                            class="update-submit-btn btn btn-primary d-inline-flex justify-content-evenly align-items-center">
+                            <span class="mx-1">
+                                <lord-icon src="https://cdn.lordicon.com/dangivhk.json" trigger="hover" stroke="bold"
+                                    state="hover-pinch" colors="primary:#121331,secondary:#66ee78"
+                                    class="update-submit-btn-lord-icon pt-1">
+                                </lord-icon>
+                            </span>
+                            <span class="mx-1">
+                                Submit
+                            </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                        class="update-close-btn btn btn-secondary d-inline-flex justify-content-evenly align-items-center"
+                        data-bs-dismiss="modal">
+                        <span class="mx-1">
+                            <lord-icon src="https://cdn.lordicon.com/gkagksfn.json" trigger="hover" stroke="bold"
+                                colors="primary:#ee6d66,secondary:#121331" class="update-close-btn-lord-icon pt-1">
+                            </lord-icon>
+                        </span>
+                        <span class="mx-1">
+                            Back
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Script -->
+    <script>
+        $(document).ready(function () {
+                $('.datepicker').datepicker({
+                    format: 'dd-mm-yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+                $('#plan_select').select2({
+                    dropdownParent: $('#create_modal')
+                });
+
+                $('#plan_select').on('click', function () {
+                    $('#plan_select').select2('open');
+                });
+
+                $('#plan_list').select2();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+                var tables = $('#example').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "lengthMenu":[[10,20,50,100,500,1000], [10, 20, 50, 100, 500, 1000]],
+                    "searching":true,
+                    "sort":true,
+                    "ordering": true,
+                    "order": [[1, 'asc']],
+                    "ajax": {
+                        "url": "/getdata",
+                        "type": "POST",
+                        "dataSrc": function (json) {
+                            if (json.redirect) {
+                                window.location.href = json.redirect;
+                            } else {
+                                return json.data;
+                            }
+                        }
+                    },
+                    "columns": [
+                        {
+                            "data": "_id",
+                            "render": function (data, type, row, meta) {
+                                return '<div class="btn-group"><button onclick="update_data(\'' + data + '\')" data-name="' + data + '" class="p-0" data-bs-toggle="modal" data-bs-target="#update_modal"><lord-icon src="https://cdn.lordicon.com/zfzufhzk.json" trigger = "hover" state="hover-line" stroke = "bold" colors="primary:#121131,secondary:#ffc738,tertiary:#d59f80,quaternary:#ee6d66,quinary:#242424" class="pt-1"></lord - icon ></button> ' + '<button onclick="delete_data(\'' + data + '\')" data-name="' + data + '" class="p-0 mx-1"><lord-icon src = "https://cdn.lordicon.com/xekbkxul.json" trigger = "morph" state="morph-trash-in" stroke = "bold" colors = "primary:#121331,secondary:#e83a30,tertiary:#646e78,quaternary:#ebe6ef" class="pt-1"></lord - icon ></button></div>';
+                            },
+                            "orderable": false,
+                            "searchable": false
+                        },
+                        { "data": "name" },
+                        { "data": "reference_name" },
+                        { "data": "total_investment" },
+                        { "data": "plan" },
+                        { "data": "last_generated_date",
+                            "orderable" : false,
+                        },
+                        { "data": "mobile_number",
+                            "orderable": false,
+                        },
+                        { "data": "city" },
+                        { "data": "investment_date",
+                            "orderable":false
+                        },
+                        { "data": "email",
+                            "orderable":false
+                         },
+                        { "data": "age" },
+                    ],
+                    initComplete: function(){
+                        var api = this.api();
+                        $('#plan_list').on('change', function(e){
+                            var regexr = '{search}';
+                            api
+                                .column(4)
+                                .search(
+                                    this.value != ''
+                                        ?  regexr.replace('{search}', this.value) : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+
+                        api
+                            .columns()
+                            .eq(0)
+                            .each(function(colIdx){
+                                var cell = $('.filters th').eq(
+                                    $(api.column(colIdx).header()).index()
+                                );
+                                $('input', $('.filters th').eq($(api.column(colIdx).header()).index()))
+                                    .off('keyup change')
+                                    .on('change', function(e){
+                                        $(this).attr('title',$(this).val());
+                                        var regexr = '({search})';
+                                        var cursorPosition = this.selectionStart;
+                                        api
+                                            .column(colIdx)
+                                            .search(
+                                                this.value != ''
+                                                ? regexr.replace('{search}', this.value) : '',
+                                                this.value != '',
+                                                this.value == ''
+                                            )
+                                            .draw()
+                                    })
+                                    .on('keyup', function (e) {
+                                        e.stopPropagation();
+                                        $(this).trigger('change');
+                                        $(this)
+                                            .focus()[0]
+                                    })
+                            })
+                    }
+                });
+
+            // Example of how to programmatically navigate to the next page
+            $('#nextPageButton').on('click', function () {
+                tables.page('next').draw(false);
+            });
+        });
+        document.querySelector('.create-btn').addEventListener('mouseover', function () {
+            this.querySelector('.create-btn-lord-icon').dispatchEvent(new Event('mouseenter'));
+        });
+        document.querySelector('.create-btn').addEventListener('mouseout', function () {
+            this.querySelector('.create-btn-lord-icon').dispatchEvent(new Event('mouseleave'));
+        });
+        document.querySelector('.create-close-btn').addEventListener('mouseover', function () {
+            this.querySelector('.create-close-btn-lord-icon').dispatchEvent(new Event('mouseenter'));
+        });
+        document.querySelector('.create-close-btn').addEventListener('mouseout', function () {
+            this.querySelector('.create-close-btn-lord-icon').dispatchEvent(new Event('mouseleave'));
+        });
+        document.querySelector('.create-submit-btn').addEventListener('mouseover', function () {
+            this.querySelector('.create-submit-btn-lord-icon').dispatchEvent(new Event('mouseenter'));
+        });
+        document.querySelector('.create-submit-btn').addEventListener('mouseout', function () {
+            this.querySelector('.create-submit-btn-lord-icon').dispatchEvent(new Event('mouseleave'));
+        });
+        document.querySelector('.update-close-btn').addEventListener('mouseover', function () {
+            this.querySelector('.update-close-btn-lord-icon').dispatchEvent(new Event('mouseenter'));
+        });
+        document.querySelector('.update-close-btn').addEventListener('mouseout', function () {
+            this.querySelector('.update-close-btn-lord-icon').dispatchEvent(new Event('mouseleave'));
+        });
+        document.querySelector('.update-submit-btn').addEventListener('mouseover', function () {
+            this.querySelector('.update-submit-btn-lord-icon').dispatchEvent(new Event('mouseenter'));
+        });
+        document.querySelector('.update-submit-btn').addEventListener('mouseout', function () {
+            this.querySelector('.update-submit-btn-lord-icon').dispatchEvent(new Event('mouseleave'));
+        });
+        document.querySelector('.logout-btn').addEventListener('mouseover', function () {
+            this.querySelector('.logout-btn-lord-icon').dispatchEvent(new Event('mouseenter'));
+        });
+        document.querySelector('.logout-btn').addEventListener('mouseout', function () {
+            this.querySelector('.logout-btn-lord-icon').dispatchEvent(new Event('mouseleave'));
+        });
+        function logout(){
+            $.ajax({
+                url: '/logout',
+                type: 'POST',
+                success: function (response) {
+                    alert(response.message)
+                    window.location.href = response.redirect;
+                },
+                error: function (error) {
+                    console.error('Error updating:', error);
+                    alert('Update failed. Please try again.');
+                }
+            })
+        }
+        function delete_data(id) {
+            $.ajax({
+                    url: '/delete/' + id,
+                    type: 'GET',
+                    success: function (response) {
+                        alert(response.message)
+                        window.location.href = response.redirect;
+                    },
+                    error: function (error) {
+                        console.error('Error updating:', error);
+                        alert('Update failed. Please try again.');
+                    }
+                });
+        }
+        $('.create-submit-btn').on('click', function () {
+            $.ajax({
+                    url: '/create',
+                    method: 'POST',
+                    success: function (response) {
+                        $('#create_modal').modal('hide');
+                        alert(response.message)
+                        window.location.href = response.redirect;
+                    },
+                    error: function (error) {
+                        console.error('Error updating:', error);
+                        alert('Update failed. Please try again.');
+                    }
+                });
+        })
+        $('.update-submit-btn').on('click', function () {
+                // $('#update_form').submit();
+                var id = $('#update_id').val();
+                var formData = new FormData($('#update_form')[0]);
+                // console.log("FormData: "+formData);
+                $.ajax({
+                    url: '/update/' + id,
+                    method: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data:formData,
+                    success: function (response) {
+                        $('#update_modal').modal('hide');
+                        alert(response.message)
+                        window.location.href = response.redirect;
+                    },
+                    error: function (error) {
+                        console.error('Error updating:', error);
+                        alert('Update failed. Please try again.');
+                    }
+                });
+            });
+        function update_data(id) {
+                $.ajax({
+                    url: '/getdata/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#update_modal').modal('show');
+                        updateModalWithData(data);
+                    }
+                });
+            $('.update-submit-btn').on('click', function () {
+                // $('#update_form').submit();
+                var id = $('#update_id').val();
+                var formData = new FormData($('#update_form')[0]);
+                // console.log("FormData: "+formData);
+                $.ajax({
+                    url: '/update/' + id,
+                    method: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data:formData,
+                    success: function (response) {
+                        $('#update_modal').modal('hide');
+                        alert(response.message)
+                        window.location.href = response.redirect;
+                    },
+                    error: function (error) {
+                        console.error('Error updating:', error);
+                        alert('Update failed. Please try again.');
+                    }
+                });
+            });
+            function updateModalWithData(data) {
+                $('#update_id').val(data._id);
+                $('#update_name').val(data.name);
+                $('#update_reference_name').val(data.reference_name);
+                $('#update_total_investment').val(data.total_investment);
+                $('#update_plan').val(data.plan).trigger('change');
+                $('#update_last_generated_date').val(data.last_generated_date);
+                $('#update_mobile_number').val(data.mobile_number);
+                $('#update_city').val(data.city);
+                $('#update_investment_date').val(data.investment_date);
+                $('#update_email').val(data.email);
+                $('#update_age').val(data.age);
+            }
+        }
+    </script>
+</body>
+</html>
